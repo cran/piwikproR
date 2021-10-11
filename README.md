@@ -1,6 +1,12 @@
 # piwikproR
 R package for accessing data from Piwik PRO via API.
 
+<!-- badges: start -->
+[![CRAN status](https://www.r-pkg.org/badges/version/piwikproR)](https://CRAN.R-project.org/package=piwikproR)
+[![CRAN RStudio mirror downloads](https://cranlogs.r-pkg.org/badges/last-month/piwikproR?color=blue)](https://r-pkg.org/pkg/piwikproR)
+[![CRAN RStudio mirror downloads](https://cranlogs.r-pkg.org/badges/grand-total/piwikproR?color=blue)](https://r-pkg.org/pkg/piwikproR)
+<!-- badges: end -->
+
 [PIWIK PRO](https://piwik.pro/) is a tool to measure traffic of a website. 
 They offer an [API](https://developers.piwik.pro/en/latest/custom_reports/http_api/http_api.html) 
 for fetching all metrics and dimensions so you can use them in your own program.
@@ -10,6 +16,17 @@ You get the data as tibble (or as a data.frame). So it's easy to analyze the dat
 with the whole power of R.
 
 # Installation
+
+## CRAN Version
+
+The package is now [available on CRAN](https://CRAN.R-project.org/package=piwikproR). 
+So you can install it by running
+
+```
+install.packages("piwikproR")
+```
+
+## Development Version
 
 Using `devtools` it's easy to install piwikproR:
 ```
@@ -25,7 +42,7 @@ library(piwikproR)
 
 ## Credentials for API, token
 First you need to setup an access to the API. See here: 
-[https://developers.piwik.pro/en/latest/platform/authorized_api_guide.html]
+[https://developers.piwik.pro/en/latest/platform/getting_started.html#create-api-credentials-and-an-access-token]
 
 Let's say you put them into a list:
 
@@ -102,7 +119,7 @@ If you find a bug or if you have a feature request feel free and open an
 [issue](https://github.com/dfv-ms/piwikproR/issues)
 
 # Thanks
-![dfv media group](https://english.dfv.de/img/dfv_logo_en.png)
+![dfv media group](vignettes/figures/dfv_logo_en.png)
 
 Thanks to my employer [dfv media group](https://english.dfv.de/) for the 
 permission to publish this package as open source.

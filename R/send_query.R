@@ -41,7 +41,9 @@ send_query <- function(query, token, use_csv = TRUE, fetch_by_day = FALSE,
     #   mutate(date_to = lead(date_from)) %>%
     #   na.omit()
 
-    if (map_lgl(query$columns, ~ .x[[1]] == "timestamp") %>% any()) {
+    if ((map_lgl(query$columns, ~ .x[[1]] == "timestamp") %>% any()) |
+        api %in% c('sessions', 'events')
+        ){
       # already a timestamp column in columns
     } else {
       query$columns[[length(query$columns) + 1]] <- list("column_id" = "timestamp")
@@ -74,7 +76,12 @@ send_query <- function(query, token, use_csv = TRUE, fetch_by_day = FALSE,
     }
   }
   if (convert_types) {
-    result_data <- result_data %>% apply_types()
+    if (api == "query") {
+      result_data <- result_data %>% apply_types()
+    }
+    if (api == "events" | api == "sessions") {
+      result_data <- result_data %>% apply_types(timestamp_to_date = FALSE)
+    }
   }
   return(result_data)
 }
@@ -127,8 +134,10 @@ send_query_single <- function(query, token, use_csv, api, caching, caching_dir) 
           httr::content_type("application/vnd.api+json"),
           body = rjson::toJSON(query)
         )
-        dir.create(caching_dir, showWarnings = FALSE)
-        save(result, file=filename)
+        if (httr::status_code(result) == 200) {
+          dir.create(caching_dir, showWarnings = FALSE)
+          save(result, file=filename)
+        }
       }
     } else{
       result <- httr::POST(
@@ -172,8 +181,7 @@ send_query_single <- function(query, token, use_csv, api, caching, caching_dir) 
 
     if (httr::status_code(result) == 200) {
       csv <- httr::content(result, "text", encoding = "utf8")
-      csv <- readr::read_csv(csv) %>%
-        purrr::modify(as.character)
+      csv <- readr::read_csv(I(csv), col_types = readr::cols(.default = "c"))
       attr(csv, "spec") <- NULL
       csv
     }
