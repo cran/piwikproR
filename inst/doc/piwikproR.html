@@ -14,7 +14,19 @@
 
 <title>piwikproR</title>
 
-<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -24,6 +36,7 @@
   div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
   ul.task-list{list-style: none;}
     </style>
+
 
 
 <style type="text/css">
@@ -107,13 +120,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   for (var i = 0; i < sheets.length; i++) {
     if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
     try { var rules = sheets[i].cssRules; } catch (e) { continue; }
-    for (var j = 0; j < rules.length; j++) {
+    var j = 0;
+    while (j < rules.length) {
       var rule = rules[j];
       // check if there is a div.sourceCode rule
-      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -125,7 +145,187 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 
-<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
 
 
 
@@ -143,8 +343,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(piwikproR)</span></code></pre></div>
 <p><code>piwikproR</code> is a package to access data via the API of <a href="https://piwik.pro/">PIWIK PRO</a>.</p>
-<p><a href="https://piwik.pro/">PIWIK PRO</a> is a tool to measure traffic of a website. They offer an <a href="https://developers.piwik.pro/en/latest/custom_reports/http_api/http_api.html">API</a> for fetching all metrics and dimensions so you can use them in your own program.</p>
-<p>This R-Package uses the API to fetch the data from PIWIK PRO using R-code. You get the data as tibble (or as a data.frame). So it’s easy to analyze the data with the whole power of R.</p>
+<p><a href="https://piwik.pro/">PIWIK PRO</a> is a tool to measure
+traffic of a website. They offer an <a href="https://developers.piwik.pro/en/latest/custom_reports/http_api/http_api.html">API</a>
+for fetching all metrics and dimensions so you can use them in your own
+program.</p>
+<p>This R-Package uses the API to fetch the data from PIWIK PRO using
+R-code. You get the data as tibble (or as a data.frame). So it’s easy to
+analyze the data with the whole power of R.</p>
 <div id="installation" class="section level1">
 <h1>Installation</h1>
 <p>Using <code>devtools</code> it’s easy to install piwikproR:</p>
@@ -175,14 +380,16 @@ end.date &lt;- &quot;2021-04-30&quot;</code></pre>
 <div id="defining-the-columns-to-be-fetched" class="section level2">
 <h2>Defining the columns to be fetched</h2>
 <p>Now we define the columns we want to fetch. Here’s an example:</p>
-<p>We want to fetch the date, the url (only the path without the hostname) and the page_views:</p>
+<p>We want to fetch the date, the url (only the path without the
+hostname) and the page_views:</p>
 <pre><code>columns &lt;- tibble::tribble(
   ~column, ~transformation,
   &quot;timestamp&quot;, &quot;&quot;,
   &quot;event_url&quot;, &quot;to_path&quot;,
   &quot;page_views&quot;, &quot;&quot;,
 )</code></pre>
-<p>## Filters We’re only interested in – let’s say – Desktop requests. So let’s set a filter:</p>
+<p>## Filters We’re only interested in – let’s say – Desktop requests.
+So let’s set a filter:</p>
 <pre><code>filters &lt;- tibble::tribble(
  ~column, ~operator, ~value,
  &quot;device_type&quot;, &quot;eq&quot;, 0
@@ -198,15 +405,20 @@ data &lt;- send_query(query, token, caching = TRUE, fetch_by_day = FALSE)</code>
 </div>
 <div id="metrics-and-dimensions-documentation" class="section level1">
 <h1>Metrics and Dimensions Documentation</h1>
-<p>PIWIK PRO offers a great documentation of all metrics and dimensions starting here [<a href="https://developers.piwik.pro/en/latest/custom_reports/index.html" class="uri">https://developers.piwik.pro/en/latest/custom_reports/index.html</a>]</p>
+<p>PIWIK PRO offers a great documentation of all metrics and dimensions
+starting here [<a href="https://developers.piwik.pro/en/latest/custom_reports/index.html" class="uri">https://developers.piwik.pro/en/latest/custom_reports/index.html</a>]</p>
 </div>
 <div id="developing" class="section level1">
 <h1>Developing</h1>
-<p>I’m using unit tests to test my code. But these tests run against a special website_id whose data is not publicly available. So I put all those sensitive data into a private package <code>piwikproRTests</code>. If this package is not available all tests are skipped.</p>
+<p>I’m using unit tests to test my code. But these tests run against a
+special website_id whose data is not publicly available. So I put all
+those sensitive data into a private package <code>piwikproRTests</code>.
+If this package is not available all tests are skipped.</p>
 </div>
 <div id="issues" class="section level1">
 <h1>Issues</h1>
-<p>If you find a bug or if you have a feature request feel free and open an <a href="https://github.com/dfv-ms/piwikproR/issues">issue</a></p>
+<p>If you find a bug or if you have a feature request feel free and open
+an <a href="https://github.com/dfv-ms/piwikproR/issues">issue</a></p>
 </div>
 <div id="thanks" class="section level1">
 <h1>Thanks</h1>
@@ -214,7 +426,8 @@ data &lt;- send_query(query, token, caching = TRUE, fetch_by_day = FALSE)</code>
 <img src="data:image/png;base64,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" alt />
 <p class="caption">dfv media group</p>
 </div>
-<p>Thanks to my employer <a href="https://english.dfv.de/">dfv media group</a> for the permission to publish this package as open source.</p>
+<p>Thanks to my employer <a href="https://english.dfv.de/">dfv media
+group</a> for the permission to publish this package as open source.</p>
 </div>
 
 

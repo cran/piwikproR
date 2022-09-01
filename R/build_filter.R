@@ -45,6 +45,8 @@
 #'   "location_country_name", "eq", list("DE")
 #' )
 #'
+#' # This also works for transformation
+#'
 build_filter <- function(filters, global_operator = "and") {
   list(
     "operator" = global_operator,
@@ -52,12 +54,13 @@ build_filter <- function(filters, global_operator = "and") {
   )
 }
 
-build_filter_single <- function(column, operator, value, transformation = NULL){
+build_filter_single <- function(column, operator, value,
+                                transformation = NULL) {
   list(
     "operator" = "or",
     "conditions" = list(
       list(
-        "transformation_id" = transformation,
+        "transformation_id" = unlist(transformation),
         "column_id" = column,
         "condition" = list(
           "operator" = operator,
@@ -66,5 +69,3 @@ build_filter_single <- function(column, operator, value, transformation = NULL){
     )
   )
 }
-
-
